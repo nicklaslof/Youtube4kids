@@ -1,5 +1,8 @@
 package st.rhapsody.youtube4kids;
 
+import java.util.List;
+
+import st.rhapsody.youtube4kids.PlaylistTask.PlaylistCallback;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,17 +12,24 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
 
-public class VideoPlayerActivity extends Activity {
+public class VideoPlayerActivity extends Activity implements PlaylistCallback{
+
+	private ImageAdapter imageAdapter;
+	private Gallery gallery;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.videoselector);
 
-		Gallery gallery = (Gallery) findViewById(R.id.gallery1);
-		final ImageAdapter imageAdapter = new ImageAdapter(this);
+		gallery = (Gallery) findViewById(R.id.gallery1);
+		imageAdapter = new ImageAdapter(this);
 		
-		PlaylistTask playlistTask = new PlaylistTask(imageAdapter,gallery);
+		
+		
+		PlaylistTask playlistTask = new PlaylistTask(this);
+		
+		
 		playlistTask.execute("2E2D35D38C9750C1");
 
 		gallery.setOnItemClickListener(new OnItemClickListener() {
@@ -30,5 +40,12 @@ public class VideoPlayerActivity extends Activity {
 				startActivity(lVideoIntent);
 			}
 		});
+	}
+
+	@Override
+	public void execute(List<PlaylistEntry> result) {
+		imageAdapter.setPlaylistEntries(result);
+		gallery.setAdapter(imageAdapter);
+		
 	}
 }

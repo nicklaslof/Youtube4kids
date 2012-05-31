@@ -17,17 +17,16 @@ import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.widget.Gallery;
 
 public class PlaylistTask extends AsyncTask<String, Void, List<PlaylistEntry>> {
 	private static final String HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS = "https://gdata.youtube.com/feeds/api/playlists/";
 	private static final String V_2_ALT_JSON = "?v=2&alt=json";
-	private final ImageAdapter imageAdapter;
-	private final Gallery gallery;
+	private final PlaylistCallback playlistCallback;
 
-	public PlaylistTask(ImageAdapter imageAdapter, Gallery gallery) {
-		this.imageAdapter = imageAdapter;
-		this.gallery = gallery;
+
+	public PlaylistTask(PlaylistCallback playlistCallback) {
+		this.playlistCallback = playlistCallback;
+
 	}
 	
 	@Override
@@ -101,7 +100,10 @@ public class PlaylistTask extends AsyncTask<String, Void, List<PlaylistEntry>> {
 	
 	@Override
 	protected void onPostExecute(List<PlaylistEntry> result) {
-		imageAdapter.setPlaylistEntries(result);
-		gallery.setAdapter(imageAdapter);	
+		playlistCallback.execute(result);
+	}
+	
+	public interface PlaylistCallback{
+		public void execute(List<PlaylistEntry> result);
 	}
 }
