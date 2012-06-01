@@ -1,5 +1,6 @@
 package st.rhapsody.youtube4kids;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.keyes.youtube.OpenYouTubePlayerActivity;
@@ -12,4 +13,8 @@ public class YoutubePlayerActivity extends OpenYouTubePlayerActivity {
 		super.onCreate(pSavedInstanceState);
 	}
 
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
 }
