@@ -9,7 +9,6 @@ public class YoutubePlayerActivity extends OpenYouTubePlayerActivity {
 
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(pSavedInstanceState);
 	}
 

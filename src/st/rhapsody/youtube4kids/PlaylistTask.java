@@ -19,7 +19,7 @@ import android.net.Uri;
 
 public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<PlaylistEntry>> {
 	private static final String HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS = "https://gdata.youtube.com/feeds/api/playlists/";
-	private static final String V_2_ALT_JSON = "?v=2&alt=json";
+	private static final String V_2_ALT_JSON = "?v=2&alt=json&max-results=50";
 
 	public PlaylistTask(AsyncCallback<List<PlaylistEntry>> callback) {
 		super(callback);
