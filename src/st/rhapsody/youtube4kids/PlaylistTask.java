@@ -34,12 +34,12 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		try {
 			JSONArray entires = getYoutubeRootEntry(playlistId).getJSONObject("feed").getJSONArray("entry");
 
-			for (int i = 0; i < entires.length(); i++) {
+			for (int entryCounter = 0; entryCounter < entires.length(); entryCounter++) {
 				String title = "";
 				String videoId = "";
 				String url = "";
 
-				JSONObject entry = entires.getJSONObject(i);
+				JSONObject entry = entires.getJSONObject(entryCounter);
 
 				title = getTitle(entry);
 				url = getThumbUrl(url, entry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
@@ -59,8 +59,8 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 	}
 
 	private String getVideoId(String videoId, JSONArray links) throws JSONException {
-		for (int j = 0; j < links.length(); j++) {
-			JSONObject link = links.getJSONObject(j);
+		for (int linkCounter = 0; linkCounter < links.length(); linkCounter++) {
+			JSONObject link = links.getJSONObject(linkCounter);
 			String rel = link.optString("rel", null);
 			if (rel != null && rel.equals("alternate")) {
 				videoId = Uri.parse(link.optString("href", null)).getQueryParameter("v");
@@ -73,7 +73,7 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 	private String getThumbUrl(String url, JSONArray thumbs) throws JSONException {
 		for (int thumbCounter = 0; thumbCounter < thumbs.length(); thumbCounter++) {
 			JSONObject object = thumbs.getJSONObject(thumbCounter);
-			String name = object.getString("yt$name");
+			String name = object.optString("yt$name",null);
 			if (name != null && name.equals("mqdefault")) {
 				url = object.getString("url");
 				break;
