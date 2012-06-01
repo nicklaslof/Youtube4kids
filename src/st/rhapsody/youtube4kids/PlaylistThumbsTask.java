@@ -11,8 +11,8 @@ import android.widget.ImageView;
 
 public class PlaylistThumbsTask extends AsynctaskWithCallback<String, Void, Bitmap> {
 
-	static HashMap<String,Bitmap> imageCache = new HashMap<String,Bitmap>();
-	static HashMap<String,ImageView> viewCache = new HashMap<String,ImageView>();
+	static HashMap<String, Bitmap> imageCache = new HashMap<String, Bitmap>();
+	static HashMap<String, ImageView> viewCache = new HashMap<String, ImageView>();
 
 	public PlaylistThumbsTask(AsyncCallback<Bitmap> callback) {
 		super(callback);
@@ -21,11 +21,11 @@ public class PlaylistThumbsTask extends AsynctaskWithCallback<String, Void, Bitm
 	@Override
 	protected Bitmap doInBackground(String... params) {
 		String thumbUrl = params[0];
-		if (imageCache.containsKey(thumbUrl)){
+		if (imageCache.containsKey(thumbUrl)) {
 			System.out.println("cached");
 			return imageCache.get(thumbUrl);
 		}
-		
+
 		URL url;
 		Bitmap bitmap = null;
 		try {

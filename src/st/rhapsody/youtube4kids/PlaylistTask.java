@@ -73,7 +73,7 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 	private String getThumbUrl(String url, JSONArray thumbs) throws JSONException {
 		for (int thumbCounter = 0; thumbCounter < thumbs.length(); thumbCounter++) {
 			JSONObject object = thumbs.getJSONObject(thumbCounter);
-			String name = object.optString("yt$name",null);
+			String name = object.optString("yt$name", null);
 			if (name != null && name.equals("mqdefault")) {
 				url = object.getString("url");
 				break;
