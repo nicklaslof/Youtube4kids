@@ -16,17 +16,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 
-public class PlaylistTask extends AsyncTask<String, Void, List<PlaylistEntry>> {
+public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<PlaylistEntry>> {
 	private static final String HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS = "https://gdata.youtube.com/feeds/api/playlists/";
 	private static final String V_2_ALT_JSON = "?v=2&alt=json";
-	private final PlaylistCallback playlistCallback;
 
 
-	public PlaylistTask(PlaylistCallback playlistCallback) {
-		this.playlistCallback = playlistCallback;
 
+	public PlaylistTask(AsyncCallback<List<PlaylistEntry>> callback) {
+		super(callback);
 	}
 	
 	@Override
@@ -96,14 +94,5 @@ public class PlaylistTask extends AsyncTask<String, Void, List<PlaylistEntry>> {
 		System.out.println(respsonseString);
 		JSONObject youtubeJson = new JSONObject(respsonseString);
 		return youtubeJson;
-	}
-	
-	@Override
-	protected void onPostExecute(List<PlaylistEntry> result) {
-		playlistCallback.execute(result);
-	}
-	
-	public interface PlaylistCallback{
-		public void execute(List<PlaylistEntry> result);
 	}
 }
