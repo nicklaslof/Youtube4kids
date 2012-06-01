@@ -7,16 +7,15 @@ import java.util.HashMap;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.widget.ImageView;
 
-public class PlaylistThumbsTask extends AsyncTask<String, Void, Bitmap> {
+public class PlaylistThumbsTask extends AsynctaskWithCallback<String, Void, Bitmap> {
 
 	static HashMap<String,Bitmap> imageCache = new HashMap<String,Bitmap>();
 	static HashMap<String,ImageView> viewCache = new HashMap<String,ImageView>();
-	private final ImageView imageView;
-	public PlaylistThumbsTask(ImageView iv) {
-		this.imageView = iv;
+
+	public PlaylistThumbsTask(AsyncCallback<Bitmap> callback) {
+		super(callback);
 	}
 
 	@Override
@@ -45,12 +44,4 @@ public class PlaylistThumbsTask extends AsyncTask<String, Void, Bitmap> {
 		imageCache.put(thumbUrl, bitmap);
 		return bitmap;
 	}
-
-	@Override
-	protected void onPostExecute(Bitmap result) {
-
-		imageView.setImageBitmap(result);
-		
-	}
-
 }
