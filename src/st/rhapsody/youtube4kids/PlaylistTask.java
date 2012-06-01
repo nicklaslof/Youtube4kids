@@ -21,33 +21,31 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 	private static final String HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS = "https://gdata.youtube.com/feeds/api/playlists/";
 	private static final String V_2_ALT_JSON = "?v=2&alt=json";
 
-
-
 	public PlaylistTask(AsyncCallback<List<PlaylistEntry>> callback) {
 		super(callback);
 	}
-	
+
 	@Override
 	protected List<PlaylistEntry> doInBackground(String... params) {
 
 		String playlistId = params[0];
 		ArrayList<PlaylistEntry> playlists = new ArrayList<PlaylistEntry>();
-		
-		try {			
+
+		try {
 			JSONArray entires = getYoutubeRootEntry(playlistId).getJSONObject("feed").getJSONArray("entry");
-			
+
 			for (int i = 0; i < entires.length(); i++) {
 				String title = "";
 				String videoId = "";
 				String url = "";
-				
+
 				JSONObject entry = entires.getJSONObject(i);
-				
-				title = entry.getJSONObject("title").getString("$t");		
+
+				title = getTitle(entry);
 				url = getThumbUrl(url, entry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
 				videoId = getVideoId(videoId, entry.getJSONArray("link"));
-				
-				playlists.add(new PlaylistEntry(title, videoId,url));
+
+				playlists.add(new PlaylistEntry(title, videoId, url));
 			}
 
 		} catch (Exception e) {
@@ -56,15 +54,16 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		return Collections.unmodifiableList(playlists);
 	}
 
+	private String getTitle(JSONObject entry) throws JSONException {
+		return entry.getJSONObject("title").getString("$t");
+	}
+
 	private String getVideoId(String videoId, JSONArray links) throws JSONException {
 		for (int j = 0; j < links.length(); j++) {
 			JSONObject link = links.getJSONObject(j);
-
 			String rel = link.optString("rel", null);
 			if (rel != null && rel.equals("alternate")) {
-				String href = link.optString("href", null);
-				Uri parsedUri = Uri.parse(href);
-				videoId = parsedUri.getQueryParameter("v");
+				videoId = Uri.parse(link.optString("href", null)).getQueryParameter("v");
 				break;
 			}
 		}
@@ -72,11 +71,10 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 	}
 
 	private String getThumbUrl(String url, JSONArray thumbs) throws JSONException {
-		for (int thumbCounter = 0; thumbCounter < thumbs.length(); thumbCounter++){
+		for (int thumbCounter = 0; thumbCounter < thumbs.length(); thumbCounter++) {
 			JSONObject object = thumbs.getJSONObject(thumbCounter);
 			String name = object.getString("yt$name");
-			
-			if (name != null && name.equals("mqdefault")){
+			if (name != null && name.equals("mqdefault")) {
 				url = object.getString("url");
 				break;
 			}
@@ -86,13 +84,11 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 
 	private JSONObject getYoutubeRootEntry(String playlistId) throws IOException, ClientProtocolException, UnsupportedEncodingException, JSONException {
 		DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-		HttpGet get = new HttpGet(HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS + playlistId + V_2_ALT_JSON);
-		HttpResponse youtubeResponse = defaultHttpClient.execute(get);
+		HttpResponse youtubeResponse = defaultHttpClient.execute(new HttpGet(HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS + playlistId + V_2_ALT_JSON));
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		youtubeResponse.getEntity().writeTo(byteArrayOutputStream);
 		String respsonseString = byteArrayOutputStream.toString("UTF-8");
-		System.out.println(respsonseString);
-		JSONObject youtubeJson = new JSONObject(respsonseString);
-		return youtubeJson;
+
+		return new JSONObject(respsonseString);
 	}
 }
