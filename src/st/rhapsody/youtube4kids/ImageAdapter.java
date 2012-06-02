@@ -23,7 +23,6 @@ public class ImageAdapter extends BaseAdapter {
 
 	public ImageAdapter(VideoPlayerActivity videoPlayerActivity) {
 		this.applicationContext = videoPlayerActivity.getApplicationContext();
-
 	}
 
 	public void setPlaylistEntries(List<PlaylistEntry> playlistEntries) {
@@ -36,7 +35,7 @@ public class ImageAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public String getItem(int position) {
 		return playlistEntries.get(position).getId();
 	}
 
@@ -48,24 +47,14 @@ public class ImageAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		if (convertView != null) {
-			return convertView;
+		View cachedView = getCachedView(position, convertView);
+		if (cachedView != null) {
+			return cachedView;
 		}
-
-		if (viewCache.containsKey(position)) {
-			return viewCache.get(position);
-		}
-
-		LinearLayout linearLayout = new LinearLayout(applicationContext);
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
 
 		final ImageView imageView = new ImageView(applicationContext);
 
 		try {
-
-			imageView.setLayoutParams(new Gallery.LayoutParams(320, 180));
-			imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
 			PlaylistThumbsTask playlistThumbsTask = new PlaylistThumbsTask(new AsyncCallback<Bitmap>() {
 
 				@Override
@@ -80,14 +69,34 @@ public class ImageAdapter extends BaseAdapter {
 			e.printStackTrace();
 		}
 
+		LinearLayout linearLayout = createLayout(playlistEntries.get(position).getTitle(), imageView);
+		viewCache.put(position, linearLayout);
+
+		return linearLayout;
+	}
+
+	private View getCachedView(int position, View convertView) {
+		if (convertView != null) {
+			return convertView;
+		}
+		if (viewCache.containsKey(position)) {
+			return viewCache.get(position);
+		}
+		return null;
+	}
+
+	private LinearLayout createLayout(String title, ImageView imageView) {
+		LinearLayout linearLayout = new LinearLayout(applicationContext);
+		linearLayout.setOrientation(LinearLayout.VERTICAL);
+		imageView.setLayoutParams(new Gallery.LayoutParams(320, 180));
+		imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
 		TextView textView = new TextView(applicationContext);
-		textView.setText(playlistEntries.get(position).getTitle());
+		textView.setText(title);
 
 		linearLayout.addView(imageView);
 		linearLayout.addView(textView);
 		linearLayout.setPadding(20, 20, 20, 20);
-
-		viewCache.put(position, linearLayout);
 
 		return linearLayout;
 	}

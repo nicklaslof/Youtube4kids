@@ -41,7 +41,7 @@ public class VideoPlayerActivity extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				String youtubeid = (String) imageAdapter.getItem(position);
+				String youtubeid = imageAdapter.getItem(position);
 				Intent lVideoIntent = new Intent(null, Uri.parse("ytv://" + youtubeid), VideoPlayerActivity.this, YoutubePlayerActivity.class);
 				app.setVideoPlaying(true);
 				startActivity(lVideoIntent);
@@ -58,7 +58,6 @@ public class VideoPlayerActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 		if (!app.isVideoPlaying()) {
-			System.out.println("VideoPlayer onPause");
 			finish();
 		}
 	}
