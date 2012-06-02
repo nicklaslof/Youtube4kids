@@ -16,10 +16,12 @@ public class VideoPlayerActivity extends Activity {
 
 	private ImageAdapter imageAdapter;
 	private Gallery gallery;
+	private Youtube4KidsApplication app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		app = (Youtube4KidsApplication) getApplication();
 		setContentView(R.layout.videoselector);
 
 		gallery = (Gallery) findViewById(R.id.gallery1);
@@ -36,10 +38,12 @@ public class VideoPlayerActivity extends Activity {
 		playlistTask.execute("2E2D35D38C9750C1");
 
 		gallery.setOnItemClickListener(new OnItemClickListener() {
+
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				String youtubeid = (String) imageAdapter.getItem(position);
 				Intent lVideoIntent = new Intent(null, Uri.parse("ytv://" + youtubeid), VideoPlayerActivity.this, YoutubePlayerActivity.class);
+				app.setVideoPlaying(true);
 				startActivity(lVideoIntent);
 			}
 		});
@@ -48,5 +52,14 @@ public class VideoPlayerActivity extends Activity {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (!app.isVideoPlaying()) {
+			System.out.println("VideoPlayer onPause");
+			finish();
+		}
 	}
 }
