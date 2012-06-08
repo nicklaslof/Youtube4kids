@@ -32,7 +32,7 @@ public class PlaylistSelectorActivity extends Activity {
 			}
 		});
 		
-		playlistTask.execute("2E2D35D38C9750C1","68282CFF66E9E68D"); // Needs to be replaced with configurable IDs
+		playlistTask.execute("CE2937EB39FAD5C9","17C039397320E463","39DA49B3FC33FAA5","396B5D0A58C80879","C79DB71007C97CBC","93A073013645CB15"); // Needs to be replaced with configurable IDs
 		
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 

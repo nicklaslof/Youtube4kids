@@ -22,8 +22,8 @@ public class ImageAdapter extends BaseAdapter {
 	private Map<Integer, View> viewCache = new HashMap<Integer, View>();
 	private List<PlaylistEntry> playlistEntries = new ArrayList<PlaylistEntry>();
 
-	public ImageAdapter(Activity activity) {
-		this.applicationContext = activity.getApplicationContext();
+	public ImageAdapter(Activity videoPlayerActivity) {
+		this.applicationContext = videoPlayerActivity.getApplicationContext();
 	}
 
 	public void setPlaylistEntries(List<PlaylistEntry> playlistEntries) {
@@ -62,7 +62,7 @@ public class ImageAdapter extends BaseAdapter {
 				public void call(Bitmap result) {
 					imageView.setImageBitmap(result);
 				}
-			});
+			}, applicationContext);
 
 			playlistThumbsTask.execute(playlistEntries.get(position).getThumbUrl());
  
