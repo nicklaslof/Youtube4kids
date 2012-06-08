@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" android:name="Youtube4KidsApplication">
         <activity
-            android:name="VideoPlayerActivity"
+            android:name="PlaylistSelectorActivity"
             android:configChanges="keyboardHidden|orientation"
             android:hardwareAccelerated="true" >
             <intent-filter>
@@ -23,8 +23,12 @@
             </intent-filter>
         </activity>
         <activity android:name="com.keyes.youtube.OpenYouTubePlayerActivity" />
+        <activity android:name="VideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation"
+            ></activity>
         <activity android:name="YoutubePlayerActivity" 
-            android:configChanges="keyboardHidden|orientation"/>
+            android:configChanges="keyboardHidden|orientation"
+            android:hardwareAccelerated="true"/>
     </application>
 
 </manifest>

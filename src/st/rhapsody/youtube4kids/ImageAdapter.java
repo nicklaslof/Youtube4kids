@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -21,8 +22,8 @@ public class ImageAdapter extends BaseAdapter {
 	private Map<Integer, View> viewCache = new HashMap<Integer, View>();
 	private List<PlaylistEntry> playlistEntries = new ArrayList<PlaylistEntry>();
 
-	public ImageAdapter(VideoPlayerActivity videoPlayerActivity) {
-		this.applicationContext = videoPlayerActivity.getApplicationContext();
+	public ImageAdapter(Activity activity) {
+		this.applicationContext = activity.getApplicationContext();
 	}
 
 	public void setPlaylistEntries(List<PlaylistEntry> playlistEntries) {
@@ -64,7 +65,7 @@ public class ImageAdapter extends BaseAdapter {
 			});
 
 			playlistThumbsTask.execute(playlistEntries.get(position).getThumbUrl());
-
+ 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

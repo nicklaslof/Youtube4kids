@@ -42,7 +42,7 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 				JSONObject entry = entires.getJSONObject(entryCounter);
 
 				title = getTitle(entry);
-				url = getThumbUrl(url, entry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
+				url = getThumbUrl(entry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
 				videoId = getVideoId(videoId, entry.getJSONArray("link"));
 
 				playlists.add(new PlaylistEntry(title, videoId, url));
@@ -54,7 +54,7 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		return Collections.unmodifiableList(playlists);
 	}
 
-	private String getTitle(JSONObject entry) throws JSONException {
+	protected String getTitle(JSONObject entry) throws JSONException {
 		return entry.getJSONObject("title").getString("$t");
 	}
 
@@ -70,19 +70,19 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		return videoId;
 	}
 
-	private String getThumbUrl(String url, JSONArray thumbs) throws JSONException {
+	protected String getThumbUrl(JSONArray thumbs) throws JSONException {
+		
 		for (int thumbCounter = 0; thumbCounter < thumbs.length(); thumbCounter++) {
 			JSONObject object = thumbs.getJSONObject(thumbCounter);
 			String name = object.optString("yt$name", null);
 			if (name != null && name.equals("mqdefault")) {
-				url = object.getString("url");
-				break;
+				return object.getString("url");
 			}
 		}
-		return url;
+		return "";
 	}
 
-	private JSONObject getYoutubeRootEntry(String playlistId) throws IOException, ClientProtocolException, UnsupportedEncodingException, JSONException {
+	protected JSONObject getYoutubeRootEntry(String playlistId) throws IOException, ClientProtocolException, UnsupportedEncodingException, JSONException {
 		DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
 		HttpResponse youtubeResponse = defaultHttpClient.execute(new HttpGet(HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS + playlistId + V_2_ALT_JSON));
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

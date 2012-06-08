@@ -17,7 +17,9 @@ public class VideoPlayerActivity extends Activity {
 	private ImageAdapter imageAdapter;
 	private Gallery gallery;
 	private Youtube4KidsApplication app;
-
+	public static final String ID = "id";
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,7 +37,10 @@ public class VideoPlayerActivity extends Activity {
 				gallery.setAdapter(imageAdapter);
 			}
 		});
-		playlistTask.execute("2E2D35D38C9750C1");
+		
+		String id = getIntent().getExtras().getString(ID);
+		
+		playlistTask.execute(id);
 
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 
