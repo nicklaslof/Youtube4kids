@@ -28,7 +28,7 @@ public class VideoPlayerActivity extends Activity {
 
 		gallery = (Gallery) findViewById(R.id.gallery1);
 		imageAdapter = new ImageAdapter(this);
-
+		
 		PlaylistTask playlistTask = new PlaylistTask(new AsyncCallback<List<PlaylistEntry>>() {
 
 			@Override

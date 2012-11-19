@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="lib" path="libs/openyoutubeactivity-1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/nicklas/Documents/workspace/Youtube4Kids/libs/openyoutubeactivity-1.1-patched.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

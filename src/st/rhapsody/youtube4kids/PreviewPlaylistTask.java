@@ -20,12 +20,12 @@ public class PreviewPlaylistTask extends PlaylistTask {
 			try {
 				String playlistId = params[i];
 
-				JSONObject rootEntry = getYoutubeRootEntry(playlistId).getJSONObject("feed");
+				JSONObject rootEntry = getYoutubeRootEntry(playlistId,0,0).getJSONObject("feed");
 
 				String title = getTitle(rootEntry);
-				JSONArray entries = rootEntry.getJSONArray("entry");
-				JSONObject firstEntry = entries.getJSONObject(0);
-				String thumbUrl = getThumbUrl(firstEntry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
+				//JSONArray entries = rootEntry.getJSONArray("entry");
+				//JSONObject firstEntry = entries.getJSONObject(0);
+				String thumbUrl = getThumbUrl(rootEntry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
 				list.add(new PlaylistEntry(title, playlistId, thumbUrl));
 			} catch (Exception e) {
 				e.printStackTrace();

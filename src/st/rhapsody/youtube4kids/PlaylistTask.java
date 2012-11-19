@@ -19,7 +19,7 @@ import android.net.Uri;
 
 public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<PlaylistEntry>> {
 	private static final String HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS = "https://gdata.youtube.com/feeds/api/playlists/";
-	private static final String V_2_ALT_JSON = "?v=2&alt=json&max-results=50";
+	private static final String V_2_ALT_JSON_MAX_RESULTS = "?v=2&alt=json&max-results=";
 
 	public PlaylistTask(AsyncCallback<List<PlaylistEntry>> callback) {
 		super(callback);
@@ -32,7 +32,7 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		ArrayList<PlaylistEntry> playlists = new ArrayList<PlaylistEntry>();
 
 		try {
-			JSONArray entires = getYoutubeRootEntry(playlistId).getJSONObject("feed").getJSONArray("entry");
+			JSONArray entires = getYoutubeRootEntry(playlistId,50,0).getJSONObject("feed").getJSONArray("entry");
 
 			for (int entryCounter = 0; entryCounter < entires.length(); entryCounter++) {
 				String title = "";
@@ -82,9 +82,11 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		return "";
 	}
 
-	protected JSONObject getYoutubeRootEntry(String playlistId) throws IOException, ClientProtocolException, UnsupportedEncodingException, JSONException {
+	protected JSONObject getYoutubeRootEntry(String playlistId, int maxResults, int page) throws IOException, ClientProtocolException, UnsupportedEncodingException, JSONException {
 		DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-		HttpResponse youtubeResponse = defaultHttpClient.execute(new HttpGet(HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS + playlistId + V_2_ALT_JSON));
+		String url = HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS + playlistId + V_2_ALT_JSON_MAX_RESULTS+maxResults;
+		System.out.println("opening URL "+url);
+		HttpResponse youtubeResponse = defaultHttpClient.execute(new HttpGet(url));
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		youtubeResponse.getEntity().writeTo(byteArrayOutputStream);
 		String respsonseString = byteArrayOutputStream.toString("UTF-8");
