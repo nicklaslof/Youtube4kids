@@ -40,8 +40,13 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 				String url = "";
 
 				JSONObject entry = entires.getJSONObject(entryCounter);
-
+				
 				title = getTitle(entry);
+				
+				if (title.equals("") || !entry.getJSONObject("media$group").has("media$thumbnail")){
+					continue;
+				}
+				
 				url = getThumbUrl(entry.getJSONObject("media$group").getJSONArray("media$thumbnail"));
 				videoId = getVideoId(videoId, entry.getJSONArray("link"));
 
@@ -87,10 +92,12 @@ public class PlaylistTask extends AsynctaskWithCallback<String, Void, List<Playl
 		String url = HTTPS_GDATA_YOUTUBE_COM_FEEDS_API_PLAYLISTS + playlistId + V_2_ALT_JSON_MAX_RESULTS+maxResults;
 		System.out.println("opening URL "+url);
 		HttpResponse youtubeResponse = defaultHttpClient.execute(new HttpGet(url));
+		if (youtubeResponse.getStatusLine().getStatusCode() >= 400){
+			throw new IOException("call to "+url+" resulted in status code "+youtubeResponse.getStatusLine().getStatusCode());
+		}
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		youtubeResponse.getEntity().writeTo(byteArrayOutputStream);
 		String respsonseString = byteArrayOutputStream.toString("UTF-8");
-
 		return new JSONObject(respsonseString);
 	}
 }
